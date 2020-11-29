@@ -1,6 +1,7 @@
 package main
 
 import (
+	"article-reminder/domain"
 	"article-reminder/handlers"
 	"article-reminder/postgres"
 	"fmt"
@@ -20,7 +21,11 @@ func main() {
 
 	defer DB.Close()
 
-	r := handlers.SetupRouter()
+	domainDB := domain.DB{UserRepo: postgres.NewUserRepo(DB)}
+
+	d := &domain.Domain{DB: domainDB}
+
+	r := handlers.SetupRouter(d)
 
 	port := os.Getenv("POST")
 	if port == "" {

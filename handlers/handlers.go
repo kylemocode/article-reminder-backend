@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"article-reminder/domain"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -8,6 +9,7 @@ import (
 )
 
 type Server struct {
+	domain *domain.Domain
 }
 
 func setupMiddlewares(r *chi.Mux) {
@@ -20,12 +22,12 @@ func setupMiddlewares(r *chi.Mux) {
 	r.Use(middleware.Timeout(60 * time.Second))
 }
 
-func NewServer() *Server {
-	return &Server{}
+func NewServer(domain *domain.Domain) *Server {
+	return &Server{domain: domain}
 }
 
-func SetupRouter() *chi.Mux {
-	server := NewServer()
+func SetupRouter(domain *domain.Domain) *chi.Mux {
+	server := NewServer(domain)
 
 	r := chi.NewRouter()
 
